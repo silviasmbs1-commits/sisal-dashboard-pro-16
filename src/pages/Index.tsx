@@ -1,5 +1,7 @@
-// src/pages/Index.tsx
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import { Navigation } from "@/components/navigation/Navigation";
 import { Dashboard } from "@/components/dashboard/Dashboard";
 import { ProductManagement } from "@/components/products/ProductManagement";
@@ -12,6 +14,9 @@ import { Manufacturing } from "@/components/Manufacturing/Manufacturing";
 import { Terminal } from "@/components/terminal/Terminal";
 import { BudgetManagement } from "@/components/budget/BudgetManagement";
 import { CustomerManagement } from "@/components/customers/CustomerManagement";
+import { BackupRestore } from "@/components/backup/BackupRestore";
+import { FinancialManagement } from "@/components/financial/FinancialManagement";
+import { AdvancedStockManagement } from "@/components/advanced-stock/AdvancedStockManagement";
 
 // ✅ importamos os mocks e tipos
 import { mockProducts, Product, mockCustomers, Customer } from "@/components/sales";
@@ -40,6 +45,7 @@ const loadCustomersFromLocalStorage = (): Customer[] => {
 };
 
 const Index = () => {
+  const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
 
   // Produtos
@@ -47,6 +53,18 @@ const Index = () => {
 
   // Clientes
   const [customers, setCustomers] = useState<Customer[]>(loadCustomersFromLocalStorage);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
 
   // Persistência
   useEffect(() => {
@@ -148,6 +166,12 @@ const Index = () => {
         return <Manufacturing onTabChange={setActiveTab} />;
       case "terminal":
         return <Terminal />;
+      case "backup":
+        return <BackupRestore />;
+      case "financial":
+        return <FinancialManagement />;
+      case "advanced-stock":
+        return <AdvancedStockManagement />;
       case "settings":
         return <Settings onProductAdded={handleProductAdded} />;
       default:
