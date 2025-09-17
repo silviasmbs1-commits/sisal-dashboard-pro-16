@@ -14,6 +14,7 @@ import { Manufacturing } from "@/components/Manufacturing/Manufacturing";
 import { Terminal } from "@/components/terminal/Terminal";
 import { BudgetManagement } from "@/components/budget/BudgetManagement";
 import { CustomerManagement } from "@/components/customers/CustomerManagement";
+import { SupplierManagement } from "@/components/suppliers/SupplierManagement";
 import { BackupRestore } from "@/components/backup/BackupRestore";
 import { FinancialManagement } from "@/components/financial/FinancialManagement";
 import { AdvancedStockManagement } from "@/components/advanced-stock/AdvancedStockManagement";
@@ -151,6 +152,8 @@ const Index = () => {
             setCustomers={setCustomers}
           />
         );
+      case "suppliers":
+        return <SupplierManagement />;
       case "budget":
         return (
           <BudgetManagement
